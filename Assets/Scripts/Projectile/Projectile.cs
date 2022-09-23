@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviourPun
 
     private void Update()
     {
-        Destroy(gameObject,5f);
+        pv.RPC("DestroyObject", RpcTarget.All, 5f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

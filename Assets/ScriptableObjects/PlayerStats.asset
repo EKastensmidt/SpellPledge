@@ -15,6 +15,6 @@ MonoBehaviour:
   maxHealth: 100
   speed: 4
   damage: 10
-  knockbackForce: 2
+  knockbackForce: 8
   attackSpeed: 0.6
   projectileSpeed: 6
