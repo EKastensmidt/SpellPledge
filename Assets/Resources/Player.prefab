@@ -165,6 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats: {fileID: 11400000, guid: 78620aa8fd411c844974ec46cffaa04b, type: 2}
   emitter: {fileID: 8535706151071363604}
+  emitterDistance: 0.8
 --- !u!114 &-9219211915809931808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +214,9 @@ MonoBehaviour:
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
   m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!95 &2367101937094287904
 Animator:
   serializedVersion: 3

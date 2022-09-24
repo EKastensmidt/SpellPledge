@@ -6,8 +6,12 @@ using Photon.Pun;
 public class PlayerController : Player
 {
     private Vector3 movement;
-    private float emitterOffset = 1f;
     private float shootCD;
+
+    private Vector3 pos;
+    private float angle;
+    [SerializeField] private float emitterDistance = 5f;
+
     public override void Start()
     {
         if (!photonView.IsMine)
@@ -20,6 +24,7 @@ public class PlayerController : Player
     {
         //if (!photonView.IsMine) return;
         Move();
+        UpdateEmitterPosition();
         Shoot();
     }
 
@@ -29,18 +34,39 @@ public class PlayerController : Player
         transform.position += movement * Time.deltaTime * PlayerStats.Speed;
     }
 
+    private void UpdateEmitterPosition()
+    {
+        pos = Input.mousePosition;
+        pos.z = (transform.position.z - Camera.main.transform.position.z);
+        pos = Camera.main.ScreenToWorldPoint(pos);
+        pos = pos - transform.position;
+        angle = Mathf.Atan2(pos.y, pos.x) * Mathf.Rad2Deg;
+        if (angle < 0.0f) angle += 360.0f;
+        Emitter.transform.localEulerAngles = new Vector3(0, 0, angle);
+        float xPos = Mathf.Cos(Mathf.Deg2Rad * angle) * emitterDistance;
+        float yPos = Mathf.Sin(Mathf.Deg2Rad * angle) * emitterDistance;
+        Emitter.transform.position = new Vector3(transform.position.x + xPos, transform.position.y + yPos, 0);
+
+        Vector3 mousepos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Emitter.transform.LookAt(new Vector3(0, 0, mousepos.z));
+    }
+
     private void Shoot()
     {
-        Vector3 shootDirection = new Vector3(Input.GetAxis("Fire1"), Input.GetAxis("Fire2"), 0);
-        if ((shootDirection.x != 0 || shootDirection.y != 0 || (shootDirection.x != 0 && shootDirection.y != 0)) && shootCD <= 0f)
+        if(Input.GetKey(KeyCode.Mouse0) && shootCD < 0f)
         {
-            Emitter.position += shootDirection * emitterOffset;
+            Vector3 shootDirection;
+            shootDirection = Input.mousePosition;
+            shootDirection.z = 0.0f;
+            shootDirection = Camera.main.ScreenToWorldPoint(shootDirection);
+            shootDirection = shootDirection - transform.position;
+
             GameObject shotProjectile = PhotonNetwork.Instantiate("PlayerProjectile", Emitter.position, Quaternion.identity);
             Rigidbody2D projectileRb = shotProjectile.GetComponent<Rigidbody2D>();
-            projectileRb.velocity = shootDirection * PlayerStats.ProjectileSpeed;
+
+            projectileRb.velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * PlayerStats.ProjectileSpeed;
             shootCD = PlayerStats.AttackSpeed;
         }
-        Emitter.position = transform.position;
         shootCD -= Time.deltaTime;
     }
 }
