@@ -14,10 +14,16 @@ public class Player : MonoBehaviourPun
     public Collider2D Col { get => col; set => col = value; }
     public Transform Emitter { get => emitter; set => emitter = value; }
 
+    public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
+
+    private int currentHealth;
+
+
     public virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        currentHealth = playerStats.Health;
     }
 
     public virtual void Update()
@@ -27,8 +33,8 @@ public class Player : MonoBehaviourPun
 
     public void TakeDamage(int damage)
     {
-        playerStats.CurrentHealth -= damage;
-        if (playerStats.CurrentHealth <= 0)
+        currentHealth -= damage;
+        if (currentHealth <= 0)
         {
             Die();
         }
