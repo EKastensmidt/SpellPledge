@@ -30,9 +30,14 @@ public class PlayerController : Player
 
     private void Move()
     {
-        movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+        movement = new Vector3(x, y, 0);
+        SetAnimation(x, y);
         transform.position += movement * Time.deltaTime * PlayerStats.Speed;
     }
+
+    
 
     private void UpdateEmitterPosition()
     {
@@ -69,4 +74,16 @@ public class PlayerController : Player
         }
         shootCD -= Time.deltaTime;
     }
+
+    private void SetAnimation(float x, float y)
+    {
+        PV.RPC("UpdateAnimations", RpcTarget.All, "HSpeed", x);   
+        PV.RPC("UpdateAnimations", RpcTarget.All, "VSpeed", y);
+    }
+
+    [PunRPC]
+    void UpdateAnimations(string animationName, float movementDir)
+    {
+        Animator.SetFloat(animationName, movementDir);
+    } 
 }

@@ -15,8 +15,12 @@ public class Player : MonoBehaviourPun
     public Transform Emitter { get => emitter; set => emitter = value; }
 
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
+    public Animator Animator { get => animator; set => animator = value; }
+    public PhotonView PV { get => pv; set => pv = value; }
 
     private int currentHealth;
+    [SerializeField] private Animator animator;
+    [SerializeField] private PhotonView pv;
 
 
     public virtual void Start()
