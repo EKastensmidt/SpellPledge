@@ -10,6 +10,10 @@ public class NetManager : MonoBehaviourPunCallbacks
 {
     public Button button;
     public TextMeshProUGUI status;
+    public TMP_InputField nickName;
+    public TMP_InputField roomName;
+    public TMP_InputField maxPlayers;
+
 
     private void Start()
     {
@@ -45,9 +49,16 @@ public class NetManager : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
+        if (string.IsNullOrEmpty(roomName.text) || string.IsNullOrWhiteSpace(roomName.text)) return;
+        if (string.IsNullOrEmpty(nickName.text) || string.IsNullOrWhiteSpace(nickName.text)) return;
+        if (string.IsNullOrEmpty(maxPlayers.text) || string.IsNullOrWhiteSpace(maxPlayers.text)) return;
+
+
+        PhotonNetwork.NickName = nickName.text;
+
         RoomOptions options = new RoomOptions();
-        options.MaxPlayers = 4;
-        PhotonNetwork.JoinOrCreateRoom("Jueguito",options,TypedLobby.Default);
+        options.MaxPlayers = byte.Parse(maxPlayers.text);
+        PhotonNetwork.JoinOrCreateRoom(roomName.text,options,TypedLobby.Default);
         button.interactable = false;
     }
 
