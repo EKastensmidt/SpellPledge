@@ -42,6 +42,8 @@ MonoBehaviour:
   - DestroyObject
   - UpdateAnimations
   - AddKnockBack
+  - UpdatePlayerHealth
+  - DamageTaken
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

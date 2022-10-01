@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class Player : MonoBehaviourPun
 {
@@ -17,11 +18,14 @@ public class Player : MonoBehaviourPun
     public int CurrentHealth { get => currentHealth; set => currentHealth = value; }
     public Animator Animator { get => animator; set => animator = value; }
     public PhotonView PV { get => pv; set => pv = value; }
+    public TextMeshPro Tmp { get => tmp; set => tmp = value; }
 
     private int currentHealth;
     [SerializeField] private Animator animator;
     [SerializeField] private PhotonView pv;
+    [SerializeField] private TextMeshPro tmp;
 
+    private GameManager gameManager;
 
     public virtual void Start()
     {
@@ -29,6 +33,7 @@ public class Player : MonoBehaviourPun
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         currentHealth = playerStats.Health;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public virtual void Update()
@@ -38,7 +43,8 @@ public class Player : MonoBehaviourPun
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        pv.RPC("DamageTaken", RpcTarget.All, damage);
+        ChangePlayerHealth();
         if (currentHealth <= 0)
         {
             Die();
@@ -50,15 +56,34 @@ public class Player : MonoBehaviourPun
         Debug.Log("DEAD");
     }
 
+
+
     public void ApplyKnockBack(Vector2 direction)
     {
         pv.RPC("AddKnockBack", RpcTarget.All, direction);
     }
 
+    public void ChangePlayerHealth()
+    {
+        pv.RPC("UpdatePlayerHealth", RpcTarget.All);
+    }
+
+    // PUNRPCs
     [PunRPC]
     public void AddKnockBack(Vector2 direction)
     {
         rb.AddForce(-direction * playerStats.KnockbackForce, ForceMode2D.Impulse);
     }
 
+    [PunRPC]
+    public void DamageTaken(int damage)
+    {
+        currentHealth -= damage;
+    }
+
+    [PunRPC]
+    public void UpdatePlayerHealth()
+    {
+        Tmp.text = "HP: " + currentHealth;
+    }
 }

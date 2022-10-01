@@ -57,7 +57,7 @@ public class PlayerController : Player
 
     private void Shoot()
     {
-        if(Input.GetKey(KeyCode.Mouse0) && shootCD < 0f)
+        if (Input.GetKey(KeyCode.Mouse0) && shootCD < 0f)
         {
             Vector3 shootDirection;
             shootDirection = Input.mousePosition;

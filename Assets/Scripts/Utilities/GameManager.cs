@@ -6,6 +6,7 @@ using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private PhotonView pv;
     [SerializeField] private TextMeshProUGUI ping;
     void Start()
     {
