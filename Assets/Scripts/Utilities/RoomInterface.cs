@@ -5,10 +5,25 @@ using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class NewBehaviourScript : MonoBehaviour
+public class RoomInterface : MonoBehaviourPunCallbacks
 {
+    public TextMeshProUGUI text;
     private void Start()
     {
-        string nameRoom = PhotonNetwork.CurrentRoom.Name;
+        UpdateInterface();
     }
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        UpdateInterface();
+    }
+
+    private void UpdateInterface()
+    {
+        string nameRoom = PhotonNetwork.CurrentRoom.Name;
+        string maxPlayers = PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
+        string countPlayers = PhotonNetwork.CurrentRoom.PlayerCount.ToString();
+
+        text.text = nameRoom + " " + countPlayers + "/" + maxPlayers;
+    }
+
 }

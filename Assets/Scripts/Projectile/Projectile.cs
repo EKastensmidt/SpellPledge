@@ -9,24 +9,21 @@ public class Projectile : MonoBehaviourPun
     [SerializeField] private PhotonView pv;
     private void Start()
     {
-        //if (!photonView.IsMine)
-        //    Destroy(this);
-    }
-
-    private void Update()
-    {
-        pv.RPC("DestroyObject", RpcTarget.All, 5f);
+        //if (!pv.IsMine)
+        //    Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!pv.IsMine) return;
         Player playerHit = collision.GetComponent<Player>();
-        if (playerHit)
+        if (playerHit!=null)
         {
             Vector2 direction = (transform.position - collision.transform.position).normalized;
+            //LLamar rpc dentro de player al owner, para el knockback.
             playerHit.Rb.AddForce(-direction * playerStats.KnockbackForce, ForceMode2D.Impulse);
             playerHit.TakeDamage(playerStats.Damage);
-            pv.RPC("DestroyObject", RpcTarget.All, 0f);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

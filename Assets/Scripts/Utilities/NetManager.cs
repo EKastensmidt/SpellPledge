@@ -17,7 +17,12 @@ public class NetManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        nickName.text = "ezexd";
+        roomName.text = "salitaxd";
+        maxPlayers.text = 2.ToString();
+
+
+    PhotonNetwork.ConnectUsingSettings();
         button.interactable = false;
         status.text = "Connecting to master";
     }

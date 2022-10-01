@@ -14,15 +14,13 @@ public class PlayerController : Player
 
     public override void Start()
     {
-        if (!photonView.IsMine)
-            Destroy(this);
         base.Start();
         shootCD = 0f;
     }
 
     public override void Update()
     {
-        //if (!photonView.IsMine) return;
+        if (!photonView.IsMine) return;
         Move();
         UpdateEmitterPosition();
         Shoot();
@@ -33,8 +31,8 @@ public class PlayerController : Player
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
         movement = new Vector3(x, y, 0);
-        SetAnimation(x, y);
         transform.position += movement * Time.deltaTime * PlayerStats.Speed;
+        SetAnimation(x,y);
     }
 
     
@@ -77,12 +75,12 @@ public class PlayerController : Player
 
     private void SetAnimation(float x, float y)
     {
-        PV.RPC("UpdateAnimations", RpcTarget.All, "HSpeed", x);   
-        PV.RPC("UpdateAnimations", RpcTarget.All, "VSpeed", y);
+        UpdateAnimations("HSpeed", x);
+        UpdateAnimations("VSpeed", y);
+
     }
 
-    [PunRPC]
-    void UpdateAnimations(string animationName, float movementDir)
+   public void UpdateAnimations(string animationName, float movementDir)
     {
         Animator.SetFloat(animationName, movementDir);
     } 
