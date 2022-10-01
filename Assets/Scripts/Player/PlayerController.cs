@@ -21,6 +21,7 @@ public class PlayerController : Player
     public override void Update()
     {
         if (!photonView.IsMine) return;
+
         Move();
         UpdateEmitterPosition();
         Shoot();

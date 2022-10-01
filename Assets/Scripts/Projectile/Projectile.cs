@@ -16,20 +16,14 @@ public class Projectile : MonoBehaviourPun
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!pv.IsMine) return;
+
         Player playerHit = collision.GetComponent<Player>();
-        if (playerHit!=null)
+        if (playerHit != null)
         {
             Vector2 direction = (transform.position - collision.transform.position).normalized;
-            //LLamar rpc dentro de player al owner, para el knockback.
-            playerHit.Rb.AddForce(-direction * playerStats.KnockbackForce, ForceMode2D.Impulse);
+            playerHit.ApplyKnockBack(direction);
             playerHit.TakeDamage(playerStats.Damage);
             PhotonNetwork.Destroy(gameObject);
         }
-    }
-
-    [PunRPC]
-    void DestroyObject(float secondsToDestroy)
-    {
-        Destroy(gameObject, secondsToDestroy);
     }
 }

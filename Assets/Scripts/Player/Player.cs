@@ -25,6 +25,7 @@ public class Player : MonoBehaviourPun
 
     public virtual void Start()
     {
+        playerStats.Execute();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         currentHealth = playerStats.Health;
@@ -48,4 +49,16 @@ public class Player : MonoBehaviourPun
     {
         Debug.Log("DEAD");
     }
+
+    public void ApplyKnockBack(Vector2 direction)
+    {
+        pv.RPC("AddKnockBack", RpcTarget.All, direction);
+    }
+
+    [PunRPC]
+    public void AddKnockBack(Vector2 direction)
+    {
+        rb.AddForce(-direction * playerStats.KnockbackForce, ForceMode2D.Impulse);
+    }
+
 }
