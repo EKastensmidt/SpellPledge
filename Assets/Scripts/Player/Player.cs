@@ -56,8 +56,6 @@ public class Player : MonoBehaviourPun
         Debug.Log("DEAD");
     }
 
-
-
     public void ApplyKnockBack(Vector2 direction)
     {
         pv.RPC("AddKnockBack", RpcTarget.All, direction);
@@ -67,6 +65,7 @@ public class Player : MonoBehaviourPun
     {
         pv.RPC("UpdatePlayerHealth", RpcTarget.All);
     }
+
 
     // PUNRPCs
     [PunRPC]
