@@ -10,11 +10,6 @@ public class LavaCollider : MonoBehaviourPun
     [SerializeField] private int lavaDmg = 2;
     [SerializeField] private float lavaDmgInterval = 1f;
 
-    private void Update()
-    {
-       
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!pv.IsMine) return;
