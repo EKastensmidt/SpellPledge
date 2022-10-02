@@ -36,7 +36,7 @@ public class Player : MonoBehaviourPun
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
         currentHealth = playerStats.Health;
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager = GameObject.FindObjectOfType<GameManager>();
     }
 
     public virtual void Update()
@@ -57,6 +57,8 @@ public class Player : MonoBehaviourPun
     public void Die()
     {
         Debug.Log("DEAD");
+        PhotonNetwork.Destroy(gameObject);
+        gameManager.LoseScreen();
     }
 
     public void ApplyKnockBack(Vector2 direction)

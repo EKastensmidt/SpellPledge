@@ -81,7 +81,7 @@ public class PlayerController : Player
 
     }
 
-   public void UpdateAnimations(string animationName, float movementDir)
+    public void UpdateAnimations(string animationName, float movementDir)
     {
         Animator.SetFloat(animationName, movementDir);
     } 
