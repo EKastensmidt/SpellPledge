@@ -57,8 +57,8 @@ public class Player : MonoBehaviourPun
     public void Die()
     {
         Debug.Log("DEAD");
+        gameManager.SetLoser(this);
         PhotonNetwork.Destroy(gameObject);
-        gameManager.LoseScreen();
     }
 
     public void ApplyKnockBack(Vector2 direction)

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPun
 {
     [SerializeField] private PhotonView pv;
     [SerializeField] private TextMeshProUGUI ping;
@@ -20,15 +20,20 @@ public class GameManager : MonoBehaviour
         UpdatePing();
     }
 
-    public void WinScreen()
+    public void SetLoser(Player character)
     {
-        winText.SetActive(true);
+        var player = character.PV.Owner;
+        pv.RPC("UpdateLoser", RpcTarget.All, player);
     }
 
-    public void LoseScreen()
+    [PunRPC]
+    public void UpdateLoser(Photon.Realtime.Player client)
     {
-        cameraController.SetColorGradingOnOff(true);
-        loseText.SetActive(true);
+        if (PhotonNetwork.LocalPlayer == client)
+        {
+            loseText.SetActive(true);
+            cameraController.SetColorGradingOnOff(true);
+        }
     }
 
     private void UpdatePing()

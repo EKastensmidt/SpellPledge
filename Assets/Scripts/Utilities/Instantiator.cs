@@ -2,15 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using System.Linq;
 
 public class Instantiator : MonoBehaviour
 {
     [SerializeField] private List<Transform> spawns;
     void Start()
     {
-        List<Photon.Realtime.Player> playerList = PhotonNetwork.PlayerList.ToList();
-        switch (playerList.Count)
+        switch (PhotonNetwork.PlayerList.Length)
         {
             case 1:
                 PhotonNetwork.Instantiate("Player", spawns[0].position, Quaternion.identity);
