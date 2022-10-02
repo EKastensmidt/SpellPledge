@@ -20,6 +20,7 @@ public class Player : MonoBehaviourPun
     public PhotonView PV { get => pv; set => pv = value; }
     public TextMeshPro Tmp { get => tmp; set => tmp = value; }
     public bool IsOnLava { get => isOnLava; set => isOnLava = value; }
+    public GameManager GameManager { get => gameManager; set => gameManager = value; }
 
     private int currentHealth;
     [SerializeField] private Animator animator;
@@ -50,15 +51,16 @@ public class Player : MonoBehaviourPun
         ChangePlayerHealth();
         if (currentHealth <= 0)
         {
-            Die();
+            pv.RPC("Die", pv.Owner);
         }
     }
 
+    [PunRPC]
     public void Die()
     {
         Debug.Log("DEAD");
+        PhotonNetwork.Destroy(this.gameObject);
         gameManager.SetLoser(this);
-        PhotonNetwork.Destroy(gameObject);
     }
 
     public void ApplyKnockBack(Vector2 direction)

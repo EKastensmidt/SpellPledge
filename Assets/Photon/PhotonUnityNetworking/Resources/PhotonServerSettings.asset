@@ -46,6 +46,11 @@ MonoBehaviour:
   - DamageTaken
   - UpdateWinner
   - UpdateLoser
+  - GameStarted
+  - UpdatePlayerList
+  - AddPlayerToList
+  - Die
+  - RemoveFromList
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
