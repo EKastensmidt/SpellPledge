@@ -19,6 +19,20 @@ public class GameManager : MonoBehaviourPun
     {
         UpdatePing();
     }
+    private void UpdatePing()
+    {
+        ping.text = PhotonNetwork.GetPing().ToString();
+    }
+
+
+    // HACER LISTA DE PLAYERS UNA VES QUE EL HOST INICIE LA PARTIDA E IR SACANDOLOS UNO POR UNO CUANDO PIERDAN,
+    // CHECKEAR CADA VEZ QUE UNO PIERDA HASTA QUE QUEDE SOLO UN JUGADOR VIVO, ESE VA A SER EL GANADOR.
+
+    public void SetWinner(Player character)
+    {
+        var player = character.PV.Owner;
+
+    }
 
     public void SetLoser(Player character)
     {
@@ -36,8 +50,11 @@ public class GameManager : MonoBehaviourPun
         }
     }
 
-    private void UpdatePing()
+    [PunRPC]
+    public void UpdateWinner(Photon.Realtime.Player client)
     {
-        ping.text = PhotonNetwork.GetPing().ToString();
+        
     }
+
+   
 }
