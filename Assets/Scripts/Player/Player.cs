@@ -19,6 +19,7 @@ public class Player : MonoBehaviourPun
     public Animator Animator { get => animator; set => animator = value; }
     public PhotonView PV { get => pv; set => pv = value; }
     public TextMeshPro Tmp { get => tmp; set => tmp = value; }
+    public bool IsOnLava { get => isOnLava; set => isOnLava = value; }
 
     private int currentHealth;
     [SerializeField] private Animator animator;
@@ -26,6 +27,8 @@ public class Player : MonoBehaviourPun
     [SerializeField] private TextMeshPro tmp;
 
     private GameManager gameManager;
+    private bool isOnLava = false;
+
 
     public virtual void Start()
     {

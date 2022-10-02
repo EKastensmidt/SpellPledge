@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7781354465563938112}
   - component: {fileID: 6623863036580725258}
   - component: {fileID: 4911525080340010817}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: -9219211915809931808}
   - component: {fileID: 3677020636129951976}
   - component: {fileID: 2367101937094287904}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +425,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8535706151071363604}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Emitter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
