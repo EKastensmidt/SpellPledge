@@ -29,6 +29,8 @@ public class LavaCollider : MonoBehaviourPun
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (!pv.IsMine) return;
+
         Player playerHit = collision.GetComponent<Player>();
         if (playerHit)
         {
@@ -38,6 +40,8 @@ public class LavaCollider : MonoBehaviourPun
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (!pv.IsMine) return;
+
         Player playerHit = collision.GetComponent<Player>();
         if (playerHit)
         {
