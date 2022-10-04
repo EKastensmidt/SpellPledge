@@ -9,16 +9,16 @@ using System.Linq;
 public class GameManager : MonoBehaviourPun
 {
     [SerializeField] private PhotonView pv;
-    [SerializeField] private TextMeshProUGUI ping;
+    [SerializeField] private TextMeshProUGUI ping, startCountdownText, timeText;
     [SerializeField] private GameObject loseText, winText, waitingForHostText;
     [SerializeField] private Button MasterStartButton;
 
-    [SerializeField] private float secondsToStart = 3f;
     private CameraController cameraController;
 
     private List<Player> playerList;
 
     private bool isGameStarted = false;
+    private float currentTime = 0f;
     public bool IsGameStarted { get => isGameStarted; set => isGameStarted = value; }
 
     void Start()
@@ -26,13 +26,13 @@ public class GameManager : MonoBehaviourPun
         cameraController = GameObject.FindObjectOfType<CameraController>();
         SetStartRequirements();
         playerList = new List<Player>();
+        
     }
 
     void Update()
     {
         UpdatePing();
-
-        Debug.Log(playerList.Count);
+        SetTime();
     }
 
     private void UpdatePing()
@@ -96,7 +96,14 @@ public class GameManager : MonoBehaviourPun
 
     private IEnumerator WaitToStart()
     {
-        yield return new WaitForSeconds(secondsToStart);
+        startCountdownText.gameObject.SetActive(true);
+        startCountdownText.text = "GAME STARTING: 3";
+        yield return new WaitForSeconds(1f);
+        startCountdownText.text = "GAME STARTING: 2";
+        yield return new WaitForSeconds(1f);
+        startCountdownText.text = "GAME STARTING: 1";
+        yield return new WaitForSeconds(1f);
+        startCountdownText.gameObject.SetActive(false);
         isGameStarted = true;
         playerList = GameObject.FindObjectsOfType<Player>().ToList();
     }
@@ -114,4 +121,25 @@ public class GameManager : MonoBehaviourPun
         }
         StartCoroutine(WaitToStart());
     }
+
+    private int minutes, seconds;
+
+    private void SetTime()
+    {
+        if (!IsGameStarted) return;
+        if (PhotonNetwork.IsMasterClient == false) return;
+
+        currentTime += Time.deltaTime;
+        minutes = (int)(currentTime / 60f);
+        seconds = (int)(currentTime - minutes * 60f);
+
+        pv.RPC("UpdateTime", RpcTarget.All, minutes, seconds);
+    }
+
+    [PunRPC]
+    public void UpdateTime(int minutes, int seconds)
+    {
+        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
 }
