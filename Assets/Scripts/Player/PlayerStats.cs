@@ -11,7 +11,7 @@ public class PlayerStats : ScriptableObject
     [SerializeField] private float speed = 4;
     [SerializeField] private int damage = 10;
     [SerializeField] private float knockbackForce = 2;
-    [SerializeField] private float attackSpeed = 0.6f;
+    [SerializeField] private float attackSpeed = 0.6f, shotgunAttackSpeed = 3f;
     [SerializeField] private float projectileSpeed = 6;
     private int health;
 
@@ -21,6 +21,7 @@ public class PlayerStats : ScriptableObject
     public int Health { get => health; set => health = value; }
     public float ProjectileSpeed { get => projectileSpeed; set => projectileSpeed = value; }
     public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
+    public float ShotgunAttackSpeed { get => shotgunAttackSpeed; set => shotgunAttackSpeed = value; }
 
     public void Execute()
     {
