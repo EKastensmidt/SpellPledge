@@ -9,7 +9,7 @@ using System.Linq;
 public class GameManager : MonoBehaviourPun
 {
     [SerializeField] private PhotonView pv;
-    [SerializeField] private TextMeshProUGUI ping, startCountdownText, timeText;
+    [SerializeField] private TextMeshProUGUI startCountdownText, timeText;
     [SerializeField] private GameObject loseText, winText, waitingForHostText;
     [SerializeField] private Button MasterStartButton;
 
@@ -31,13 +31,7 @@ public class GameManager : MonoBehaviourPun
 
     void Update()
     {
-        UpdatePing();
         SetTime();
-    }
-
-    private void UpdatePing()
-    {
-        ping.text = PhotonNetwork.GetPing().ToString();
     }
 
     public void SetWinner(Player character)

@@ -22,6 +22,8 @@ public class Player : MonoBehaviourPun
     public bool IsOnLava { get => isOnLava; set => isOnLava = value; }
     public GameManager GameManager { get => gameManager; set => gameManager = value; }
 
+    protected RoomInterface ui;
+
     private int currentHealth;
     [SerializeField] private Animator animator;
     [SerializeField] private PhotonView pv;
@@ -38,6 +40,7 @@ public class Player : MonoBehaviourPun
         col = GetComponent<Collider2D>();
         currentHealth = playerStats.Health;
         gameManager = GameObject.FindObjectOfType<GameManager>();
+        ui = GameObject.FindObjectOfType<RoomInterface>();
     }
 
     public virtual void Update()

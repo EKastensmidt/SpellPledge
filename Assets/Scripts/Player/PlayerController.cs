@@ -26,6 +26,7 @@ public class PlayerController : Player
         Move();
         UpdateEmitterPosition();
         Shoot();
+        ui.UpdateSkillUI(normalProjectileCD, shotgunProjectileCD);
     }
 
     private void Move()
@@ -64,52 +65,63 @@ public class PlayerController : Player
 
     private void NormalProjectile()
     {
-        if (Input.GetKey(KeyCode.Mouse0) && normalProjectileCD < 0f)
+        if (normalProjectileCD < 0)
         {
-            Vector3 shootDirection = getShootDirection();
+            ui.IsSkillOnCD("Projectile", false);
 
-            GameObject shotProjectile = PhotonNetwork.Instantiate("PlayerProjectile", Emitter.position, Quaternion.identity);
-            Rigidbody2D projectileRb = shotProjectile.GetComponent<Rigidbody2D>();
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                Vector3 shootDirection = getShootDirection();
 
-            projectileRb.velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * PlayerStats.ProjectileSpeed;
-            normalProjectileCD = PlayerStats.AttackSpeed;
-            StartCoroutine(DestroyProjectile(5f, shotProjectile));
+                GameObject shotProjectile = PhotonNetwork.Instantiate("PlayerProjectile", Emitter.position, Quaternion.identity);
+                Rigidbody2D projectileRb = shotProjectile.GetComponent<Rigidbody2D>();
+
+                projectileRb.velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * PlayerStats.ProjectileSpeed;
+                normalProjectileCD = PlayerStats.AttackSpeed;
+                StartCoroutine(DestroyProjectile(5f, shotProjectile));
+                ui.IsSkillOnCD("Projectile", true);
+            }
         }
         normalProjectileCD -= Time.deltaTime;
     }
 
     private void ShotgunProjectile()
     {
-        if(Input.GetKey(KeyCode.Mouse1) && shotgunProjectileCD < 0f)
+        if (shotgunProjectileCD < 0f)
         {
-            Vector3 shootDirection = getShootDirection();
-            float spreadAngle = 0;
-            
-            for (int i = 0; i <= 2; i++)
+            ui.IsSkillOnCD("Shotgun", false);
+            if (Input.GetKey(KeyCode.Mouse1) && shotgunProjectileCD < 0f)
             {
-                GameObject shotProjectile = PhotonNetwork.Instantiate("PlayerProjectile", Emitter.position, Quaternion.identity);
-                Rigidbody2D projectileRb = shotProjectile.GetComponent<Rigidbody2D>();
-                
-                switch (i)
+                Vector3 shootDirection = getShootDirection();
+                float spreadAngle = 0;
+
+                for (int i = 0; i <= 2; i++)
                 {
-                    case 0:
-                        spreadAngle = 15f;
-                        break;
-                    case 1:
-                        spreadAngle = 0f;
-                        break;
-                    case 2:
-                        spreadAngle = -15f;
-                        break;
+                    GameObject shotProjectile = PhotonNetwork.Instantiate("PlayerProjectile", Emitter.position, Quaternion.identity);
+                    Rigidbody2D projectileRb = shotProjectile.GetComponent<Rigidbody2D>();
+
+                    switch (i)
+                    {
+                        case 0:
+                            spreadAngle = 15f;
+                            break;
+                        case 1:
+                            spreadAngle = 0f;
+                            break;
+                        case 2:
+                            spreadAngle = -15f;
+                            break;
+                    }
+
+                    float rotateAngle = spreadAngle + (Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg);
+                    Vector2 MovementDirection = new Vector2(Mathf.Cos(rotateAngle * Mathf.Deg2Rad), Mathf.Sin(rotateAngle * Mathf.Deg2Rad)).normalized;
+                    projectileRb.velocity = MovementDirection * (PlayerStats.ProjectileSpeed * 2f);
+
+                    StartCoroutine(DestroyProjectile(0.3f, shotProjectile));
                 }
-
-                float rotateAngle = spreadAngle + (Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg);
-                Vector2 MovementDirection = new Vector2(Mathf.Cos(rotateAngle * Mathf.Deg2Rad), Mathf.Sin(rotateAngle * Mathf.Deg2Rad)).normalized;
-                projectileRb.velocity = MovementDirection * (PlayerStats.ProjectileSpeed * 2f);
-
-                StartCoroutine(DestroyProjectile(0.3f, shotProjectile));
+                ui.IsSkillOnCD("Shotgun", true);
+                shotgunProjectileCD = PlayerStats.ShotgunAttackSpeed;
             }
-            shotgunProjectileCD = PlayerStats.ShotgunAttackSpeed;
         }
         shotgunProjectileCD -= Time.deltaTime;
     }
