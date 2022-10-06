@@ -8,6 +8,7 @@ public class PlayerController : Player
     private Vector3 movement;
     private float normalProjectileCD;
     private float shotgunProjectileCD;
+    private float blinkCD;
 
     private Vector3 pos;
     private float angle;
@@ -25,8 +26,8 @@ public class PlayerController : Player
         if (!GameManager.IsGameStarted) return;
         Move();
         UpdateEmitterPosition();
-        Shoot();
-        ui.UpdateSkillUI(normalProjectileCD, shotgunProjectileCD);
+        Skills();
+        ui.UpdateSkillUI(normalProjectileCD, shotgunProjectileCD, blinkCD);
     }
 
     private void Move()
@@ -57,10 +58,11 @@ public class PlayerController : Player
         Emitter.transform.LookAt(new Vector3(0, 0, mousepos.z));
     }
 
-    private void Shoot()
+    private void Skills()
     {
         NormalProjectile();
         ShotgunProjectile();
+        Blink();
     }
 
     private void NormalProjectile()
@@ -125,6 +127,26 @@ public class PlayerController : Player
             }
         }
         shotgunProjectileCD -= Time.deltaTime;
+    }
+
+    private void Blink()
+    {
+        if(blinkCD <= 0)
+        {
+            ui.IsSkillOnCD("Blink", false);
+
+            Vector3 blinkTo = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.position = Vector3.MoveTowards(transform.position, blinkTo, PlayerStats.BlinkMaxDistance);
+                transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+
+                blinkCD = PlayerStats.BlinkSpeed;
+                ui.IsSkillOnCD("Blink", true);
+            }
+        }
+        blinkCD -= Time.deltaTime;
     }
 
     private void SetAnimation(float x, float y)

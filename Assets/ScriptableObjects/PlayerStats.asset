@@ -17,4 +17,7 @@ MonoBehaviour:
   damage: 10
   knockbackForce: 8
   attackSpeed: 0.6
+  shotgunAttackSpeed: 4
+  blinkSpeed: 6
   projectileSpeed: 6
+  blinkMaxDistance: 12

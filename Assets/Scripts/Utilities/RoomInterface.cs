@@ -8,13 +8,14 @@ using Photon.Realtime;
 public class RoomInterface : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI ping, text;
-    [SerializeField] private GameObject projectileCD, shotgunCD;
+    [SerializeField] private GameObject projectileCD, shotgunCD, blinkCD;
 
-    private TextMeshProUGUI projectileCountdown, shotgunCountdown;
-    private bool isProjectileOnCoolDown = false, isShotGunOnCooldown = false;
+    private TextMeshProUGUI projectileCountdown, shotgunCountdown, blinkCountdown;
+    private bool isProjectileOnCoolDown = false, isShotGunOnCooldown = false, isBlinkOnCooldown = false;
 
     public bool IsProjectileOnCoolDown { get => isProjectileOnCoolDown; set => isProjectileOnCoolDown = value; }
     public bool IsShotGunOnCooldown { get => isShotGunOnCooldown; set => isShotGunOnCooldown = value; }
+    public bool IsBlinkOnCooldown { get => isBlinkOnCooldown; set => isBlinkOnCooldown = value; }
 
     private void Start()
     {
@@ -48,6 +49,7 @@ public class RoomInterface : MonoBehaviourPunCallbacks
     {
         projectileCountdown = projectileCD.GetComponentInChildren<TextMeshProUGUI>();
         shotgunCountdown = shotgunCD.GetComponentInChildren<TextMeshProUGUI>();
+        blinkCountdown = blinkCD.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void IsSkillOnCD(string skillName, bool cdCheck)
@@ -60,12 +62,15 @@ public class RoomInterface : MonoBehaviourPunCallbacks
             case "Shotgun":
                 isShotGunOnCooldown = cdCheck;
                 break;
+            case "Blink":
+                isBlinkOnCooldown = cdCheck;
+                break;
         }
     }
 
-    public void UpdateSkillUI(float projectileCooldown, float shotgunCooldown)
+    public void UpdateSkillUI(float projectileCooldown, float shotgunCooldown, float blinkCooldown)
     {
-        //projectile
+        //Projectile
         if(isProjectileOnCoolDown)
         {
             projectileCD.SetActive(true);
@@ -76,7 +81,7 @@ public class RoomInterface : MonoBehaviourPunCallbacks
             projectileCD.SetActive(false);
         }
 
-        //shotgun
+        //Shotgun
         if (isShotGunOnCooldown)
         {
             shotgunCD.SetActive(true);
@@ -85,6 +90,17 @@ public class RoomInterface : MonoBehaviourPunCallbacks
         else
         {
             shotgunCD.SetActive(false);
+        }
+
+        //Blink
+        if (IsBlinkOnCooldown)
+        {
+            blinkCD.SetActive(true);
+            blinkCountdown.text = ChangeTimeDisplay(blinkCooldown);
+        }
+        else
+        {
+            blinkCD.SetActive(false);
         }
     }
 
