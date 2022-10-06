@@ -90,7 +90,8 @@ public class PlayerController : Player
         if (shotgunProjectileCD < 0f)
         {
             ui.IsSkillOnCD("Shotgun", false);
-            if (Input.GetKey(KeyCode.Mouse1) && shotgunProjectileCD < 0f)
+
+            if (Input.GetKey(KeyCode.Mouse1))
             {
                 Vector3 shootDirection = getShootDirection();
                 float spreadAngle = 0;
