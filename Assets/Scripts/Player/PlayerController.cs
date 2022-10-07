@@ -73,7 +73,7 @@ public class PlayerController : Player
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                Vector3 shootDirection = getShootDirection();
+                Vector3 shootDirection = GetShootDirection();
 
                 GameObject shotProjectile = PhotonNetwork.Instantiate("PlayerProjectile", Emitter.position, Quaternion.identity);
                 Rigidbody2D projectileRb = shotProjectile.GetComponent<Rigidbody2D>();
@@ -95,7 +95,7 @@ public class PlayerController : Player
 
             if (Input.GetKey(KeyCode.Mouse1))
             {
-                Vector3 shootDirection = getShootDirection();
+                Vector3 shootDirection = GetShootDirection();
                 float spreadAngle = 0;
 
                 for (int i = 0; i <= 2; i++)
@@ -161,7 +161,7 @@ public class PlayerController : Player
         Animator.SetFloat(animationName, movementDir);
     } 
 
-    private Vector3 getShootDirection()
+    private Vector3 GetShootDirection()
     {
         Vector3 shootDirection;
         shootDirection = Input.mousePosition;
