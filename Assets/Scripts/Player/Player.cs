@@ -6,6 +6,8 @@ using TMPro;
 
 public class Player : MonoBehaviourPun
 {
+
+    private bool isShield;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Transform emitter;
     private Rigidbody2D rb;
@@ -21,6 +23,7 @@ public class Player : MonoBehaviourPun
     public TextMeshPro Tmp { get => tmp; set => tmp = value; }
     public bool IsOnLava { get => isOnLava; set => isOnLava = value; }
     public GameManager GameManager { get => gameManager; set => gameManager = value; }
+    public bool IsShield { get => isShield; set => isShield = value; }
 
     protected RoomInterface ui;
 
