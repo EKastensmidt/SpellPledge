@@ -39,8 +39,6 @@ public class PlayerController : Player
         SetAnimation(x,y);
     }
 
-    
-
     private void UpdateEmitterPosition()
     {
         pos = Input.mousePosition;
@@ -80,6 +78,7 @@ public class PlayerController : Player
 
                 projectileRb.velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * PlayerStats.ProjectileSpeed;
                 normalProjectileCD = PlayerStats.AttackSpeed;
+
                 StartCoroutine(DestroyProjectile(5f, shotProjectile));
                 ui.IsSkillOnCD("Projectile", true);
             }
@@ -139,8 +138,14 @@ public class PlayerController : Player
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
+                GameObject blink = PhotonNetwork.Instantiate("BlinkEffect", transform.position, Quaternion.identity);
+                StartCoroutine(DestroyProjectile(1.5f, blink));
+
                 transform.position = Vector3.MoveTowards(transform.position, blinkTo, PlayerStats.BlinkMaxDistance);
                 transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+
+                GameObject blink2 = PhotonNetwork.Instantiate("BlinkEffect", transform.position, Quaternion.identity);
+                StartCoroutine(DestroyProjectile(1.5f, blink2));
 
                 blinkCD = PlayerStats.BlinkSpeed;
                 ui.IsSkillOnCD("Blink", true);
