@@ -7,10 +7,12 @@ public class Projectile : MonoBehaviourPun
 {
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PhotonView pv;
+    private Rigidbody2D rb;
     private void Start()
     {
         //if (!pv.IsMine)
         //    Destroy(gameObject);
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -21,9 +23,16 @@ public class Projectile : MonoBehaviourPun
         if (playerHit != null)
         {
             Vector2 direction = (transform.position - collision.transform.position).normalized;
-            playerHit.ApplyKnockBack(direction);
-            playerHit.TakeDamage(playerStats.Damage);
-            PhotonNetwork.Destroy(gameObject);
+            if (!playerHit.IsShield)
+            {
+                playerHit.ApplyKnockBack(direction);
+                playerHit.TakeDamage(playerStats.Damage);
+                PhotonNetwork.Destroy(gameObject);
+            }
+            else
+            {
+                rb.velocity *= -1f;
+            }
         }
     }
 }

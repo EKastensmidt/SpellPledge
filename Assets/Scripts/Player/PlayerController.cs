@@ -9,6 +9,7 @@ public class PlayerController : Player
     private float normalProjectileCD;
     private float shotgunProjectileCD;
     private float blinkCD;
+    private float shieldCD;
 
     private Vector3 pos;
     private float angle;
@@ -61,6 +62,7 @@ public class PlayerController : Player
         NormalProjectile();
         ShotgunProjectile();
         Blink();
+        Shield();
     }
 
     private void NormalProjectile()
@@ -79,7 +81,7 @@ public class PlayerController : Player
                 projectileRb.velocity = new Vector2(shootDirection.x, shootDirection.y).normalized * PlayerStats.ProjectileSpeed;
                 normalProjectileCD = PlayerStats.AttackSpeed;
 
-                StartCoroutine(DestroyProjectile(5f, shotProjectile));
+                StartCoroutine(DestroyObject(5f, shotProjectile));
                 ui.IsSkillOnCD("Projectile", true);
             }
         }
@@ -119,7 +121,7 @@ public class PlayerController : Player
                     Vector2 MovementDirection = new Vector2(Mathf.Cos(rotateAngle * Mathf.Deg2Rad), Mathf.Sin(rotateAngle * Mathf.Deg2Rad)).normalized;
                     projectileRb.velocity = MovementDirection * (PlayerStats.ProjectileSpeed * 2f);
 
-                    StartCoroutine(DestroyProjectile(0.3f, shotProjectile));
+                    StartCoroutine(DestroyObject(0.3f, shotProjectile));
                 }
                 ui.IsSkillOnCD("Shotgun", true);
                 shotgunProjectileCD = PlayerStats.ShotgunAttackSpeed;
@@ -139,19 +141,33 @@ public class PlayerController : Player
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 GameObject blink = PhotonNetwork.Instantiate("BlinkEffect", transform.position, Quaternion.identity);
-                StartCoroutine(DestroyProjectile(1.5f, blink));
+                StartCoroutine(DestroyObject(1.5f, blink));
 
                 transform.position = Vector3.MoveTowards(transform.position, blinkTo, PlayerStats.BlinkMaxDistance);
                 transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
 
                 GameObject blink2 = PhotonNetwork.Instantiate("BlinkEffect", transform.position, Quaternion.identity);
-                StartCoroutine(DestroyProjectile(1.5f, blink2));
+                StartCoroutine(DestroyObject(1.5f, blink2));
 
                 blinkCD = PlayerStats.BlinkSpeed;
                 ui.IsSkillOnCD("Blink", true);
             }
         }
         blinkCD -= Time.deltaTime;
+    }
+
+    private void Shield()
+    {
+        if(shieldCD <= 0f)
+        {
+            if (Input.GetKey(KeyCode.E))
+            {
+                StartCoroutine(SetShield());
+                shieldCD = PlayerStats.ShieldSpeed;
+            }
+
+        }
+        shieldCD -= Time.deltaTime;
     }
 
     private void SetAnimation(float x, float y)
@@ -176,12 +192,22 @@ public class PlayerController : Player
         return shootDirection;
     }
 
-    IEnumerator DestroyProjectile(float secondsToDestroy, GameObject projectile)
+    IEnumerator DestroyObject(float secondsToDestroy, GameObject projectile)
     {
         yield return new WaitForSeconds(secondsToDestroy);
         if(projectile != null)
         {
             PhotonNetwork.Destroy(projectile);
         }
+    }
+
+    IEnumerator SetShield()
+    {
+        PV.RPC("SetShield", RpcTarget.All, true);
+        GameObject shield = PhotonNetwork.Instantiate("Shield", transform.position, Quaternion.identity);
+        shield.GetComponent<Shield>().Player = gameObject;
+        yield return new WaitForSeconds(3f);
+        PV.RPC("SetShield", RpcTarget.All, false);
+        StartCoroutine(DestroyObject(0f, shield));
     }
 }

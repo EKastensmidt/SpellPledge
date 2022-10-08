@@ -11,7 +11,7 @@ public class PlayerStats : ScriptableObject
     [SerializeField] private float speed = 4;
     [SerializeField] private int damage = 10;
     [SerializeField] private float knockbackForce = 2f;
-    [SerializeField] private float attackSpeed = 0.6f, shotgunAttackSpeed = 4f, blinkSpeed = 6f;
+    [SerializeField] private float attackSpeed = 0.6f, shotgunAttackSpeed = 4f, blinkSpeed = 6f, shieldSpeed = 4f;
     [SerializeField] private float projectileSpeed = 6f;
     [SerializeField] private float blinkMaxDistance = 3f;
     private int health;
@@ -25,6 +25,7 @@ public class PlayerStats : ScriptableObject
     public float ShotgunAttackSpeed { get => shotgunAttackSpeed; set => shotgunAttackSpeed = value; }
     public float BlinkSpeed { get => blinkSpeed; set => blinkSpeed = value; }
     public float BlinkMaxDistance { get => blinkMaxDistance; set => blinkMaxDistance = value; }
+    public float ShieldSpeed { get => shieldSpeed; set => shieldSpeed = value; }
 
     public void Execute()
     {

@@ -98,4 +98,10 @@ public class Player : MonoBehaviourPun
     {
         Tmp.text = "HP: " + currentHealth;
     }
+
+   [PunRPC]
+    public void SetShield(bool value)
+    {
+        isShield = value;
+    }
 }
