@@ -8,14 +8,15 @@ using Photon.Realtime;
 public class RoomInterface : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI ping, text;
-    [SerializeField] private GameObject projectileCD, shotgunCD, blinkCD;
+    [SerializeField] private GameObject projectileCD, shotgunCD, blinkCD, shieldCD;
 
-    private TextMeshProUGUI projectileCountdown, shotgunCountdown, blinkCountdown;
-    private bool isProjectileOnCoolDown = false, isShotGunOnCooldown = false, isBlinkOnCooldown = false;
+    private TextMeshProUGUI projectileCountdown, shotgunCountdown, blinkCountdown, shieldCountdown;
+    private bool isProjectileOnCoolDown = false, isShotGunOnCooldown = false, isBlinkOnCooldown = false, isShieldOnCooldown = false;
 
     public bool IsProjectileOnCoolDown { get => isProjectileOnCoolDown; set => isProjectileOnCoolDown = value; }
     public bool IsShotGunOnCooldown { get => isShotGunOnCooldown; set => isShotGunOnCooldown = value; }
     public bool IsBlinkOnCooldown { get => isBlinkOnCooldown; set => isBlinkOnCooldown = value; }
+    public bool IsShieldOnCooldown { get => isShieldOnCooldown; set => isShieldOnCooldown = value; }
 
     private void Start()
     {
@@ -50,6 +51,7 @@ public class RoomInterface : MonoBehaviourPunCallbacks
         projectileCountdown = projectileCD.GetComponentInChildren<TextMeshProUGUI>();
         shotgunCountdown = shotgunCD.GetComponentInChildren<TextMeshProUGUI>();
         blinkCountdown = blinkCD.GetComponentInChildren<TextMeshProUGUI>();
+        shieldCountdown = shieldCD.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void IsSkillOnCD(string skillName, bool cdCheck)
@@ -65,10 +67,13 @@ public class RoomInterface : MonoBehaviourPunCallbacks
             case "Blink":
                 isBlinkOnCooldown = cdCheck;
                 break;
+            case "Shield":
+                isShieldOnCooldown = cdCheck;
+                break;
         }
     }
 
-    public void UpdateSkillUI(float projectileCooldown, float shotgunCooldown, float blinkCooldown)
+    public void UpdateSkillUI(float projectileCooldown, float shotgunCooldown, float blinkCooldown, float shieldCooldown)
     {
         //Projectile
         if(isProjectileOnCoolDown)
@@ -101,6 +106,17 @@ public class RoomInterface : MonoBehaviourPunCallbacks
         else
         {
             blinkCD.SetActive(false);
+        }
+
+        //Shield
+        if (isShieldOnCooldown)
+        {
+            shieldCD.SetActive(true);
+            shieldCountdown.text = ChangeTimeDisplay(shieldCooldown);
+        }
+        else
+        {
+            shieldCD.SetActive(false);
         }
     }
 
