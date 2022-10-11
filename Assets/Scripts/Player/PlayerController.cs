@@ -15,8 +15,6 @@ public class PlayerController : Player
     private float angle;
     [SerializeField] private float emitterDistance = 5f;
 
-    private float shieldDuration = 1f;
-
     public override void Start()
     {
         base.Start();
@@ -30,7 +28,7 @@ public class PlayerController : Player
         Move();
         UpdateEmitterPosition();
         Skills();
-        ui.UpdateSkillUI(normalProjectileCD, shotgunProjectileCD, blinkCD, shieldCD);
+        ui.UpdateSkillUI(normalProjectileCD, shotgunProjectileCD, blinkCD);
     }
 
     private void Move()
@@ -162,15 +160,12 @@ public class PlayerController : Player
     {
         if(shieldCD <= 0f)
         {
-            ui.IsSkillOnCD("Shield", false);
-
             if (Input.GetKey(KeyCode.E))
             {
                 StartCoroutine(SetShield());
                 shieldCD = PlayerStats.ShieldSpeed;
-                ui.IsSkillOnCD("Shield", true);
-
             }
+
         }
         shieldCD -= Time.deltaTime;
     }
@@ -211,7 +206,7 @@ public class PlayerController : Player
         PV.RPC("SetShield", RpcTarget.All, true);
         GameObject shield = PhotonNetwork.Instantiate("Shield", transform.position, Quaternion.identity);
         shield.GetComponent<Shield>().Player = gameObject;
-        yield return new WaitForSeconds(shieldDuration);
+        yield return new WaitForSeconds(3f);
         PV.RPC("SetShield", RpcTarget.All, false);
         StartCoroutine(DestroyObject(0f, shield));
     }
