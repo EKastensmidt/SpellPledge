@@ -17,9 +17,9 @@ public class NetManager : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        nickName.text = "ezexd";
-        roomName.text = "salitaxd";
-        maxPlayers.text = 2.ToString();
+        nickName.text = "eze";
+        roomName.text = "salita";
+        maxPlayers.text = 4.ToString();
 
 
     PhotonNetwork.ConnectUsingSettings();

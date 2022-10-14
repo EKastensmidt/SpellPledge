@@ -20,7 +20,7 @@ public class Instantiator : MonoBehaviour
                 PhotonNetwork.Instantiate("Player3", spawns[2].position, Quaternion.identity);
                 break;
             case 4:
-                PhotonNetwork.Instantiate("Player4", spawns[3].position, Quaternion.identity);
+                PhotonNetwork.Instantiate("Player3", spawns[3].position, Quaternion.identity); // Change to "Player4" when prefab ready :)
                 break;
 
         }
