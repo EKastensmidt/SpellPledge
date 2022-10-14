@@ -6,7 +6,7 @@ using TMPro;
 
 public class Player : MonoBehaviourPun
 {
-
+    [SerializeField] private TextMeshPro playerName;
     private bool isShield;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Transform emitter;
@@ -44,6 +44,7 @@ public class Player : MonoBehaviourPun
         currentHealth = playerStats.Health;
         gameManager = GameObject.FindObjectOfType<GameManager>();
         ui = GameObject.FindObjectOfType<RoomInterface>();
+        SetPlayerName();
     }
 
     public virtual void Update()
@@ -80,6 +81,14 @@ public class Player : MonoBehaviourPun
     }
 
 
+    private void SetPlayerName()
+    {
+        if (photonView.IsMine)
+        {
+            photonView.RPC("RequestName", RpcTarget.AllBuffered);
+        }
+    }
+
     // PUNRPCs
     [PunRPC]
     public void AddKnockBack(Vector2 direction)
@@ -103,5 +112,11 @@ public class Player : MonoBehaviourPun
     public void SetShield(bool value)
     {
         isShield = value;
+    }
+
+    [PunRPC]
+    public void RequestName()
+    {
+        playerName.text = photonView.Owner.NickName;
     }
 }
