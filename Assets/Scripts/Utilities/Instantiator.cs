@@ -22,6 +22,7 @@ public class Instantiator : MonoBehaviour
             case 4:
                 PhotonNetwork.Instantiate("Player4", spawns[3].position, Quaternion.identity);
                 break;
+
         }
     }
 }

@@ -54,6 +54,8 @@ MonoBehaviour:
   - UpdateTime
   - SetParent
   - SetShield
+  - UpdateName
+  - RequestName
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
